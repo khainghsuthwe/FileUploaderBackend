@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon  src/server.ts"
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js"
   },
   "keywords": [],
   "author": "",
@@ -16,7 +17,9 @@
     "express": "^4.21.2",
     "express-rate-limit": "^6.11.2",
     "helmet": "^7.2.0",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "cloudinary": "^1.34.0",
+    "streamifier": "^0.1.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
