@@ -11,8 +11,7 @@ const fs = require("fs");
 const UPLOADS_DIR = path.join(__dirname, "../../uploads");
 if (process.env.VERCEL) {
   console.log("Running on Vercel — skipping local upload directory setup");
-}
-else(!fs.existsSync(UPLOADS_DIR)) {
+} else if (!fs.existsSync(UPLOADS_DIR)) {
   fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 }
 
