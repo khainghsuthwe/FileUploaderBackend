@@ -12,13 +12,13 @@ const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/gif"];
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
 // Ensure uploads directory exists (if not on Vercel)
-if (process.env.VERCEL) {
-  console.warn("Running on Vercel — skipping local upload directory setup");
-} else {
-  if (!fs.existsSync(UPLOADS_DIR)) {
-    fs.mkdirSync(UPLOADS_DIR, { recursive: true });
-  }
-}
+// if (process.env.VERCEL) {
+//   console.log("Running on Vercel — skipping local upload directory setup");
+// } else {
+//   if (!fs.existsSync(UPLOADS_DIR)) {
+//     fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+//   }
+// }
 
 // ---------- Cloudinary Setup ----------
 const cloudinaryConfigured = Boolean(
