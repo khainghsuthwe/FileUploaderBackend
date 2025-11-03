@@ -86,7 +86,7 @@ POST /api/upload
 GET /api/upload
 ```
 
-#### 2.Delete an image
+#### 3.Delete an image
 
 ```
 POST /api/upload/:filename
