@@ -85,30 +85,6 @@ exports.uploadFile = async (req, res) => {
     // ---- Cloudinary Upload (preferred) ----
     if (req.file.buffer && cloudinaryConfigured) {
       const folder = process.env.CLOUDINARY_FOLDER || "fileuploader";
-      // const uploadStream = cloudinary.uploader.upload_stream(
-      //   {
-      //     folder,
-      //     resource_type: "image",
-      //     use_filename: true,
-      //     unique_filename: true,
-      //     overwrite: false,
-      //   },
-      //   (error, result) => {
-      //     if (error) {
-      //       logError("Cloudinary upload error", error);
-      //       return fallbackToDisk(req, res, req.file.buffer, originalName);
-      //     }
-
-      //     return res.status(200).json({
-      //       message: "File uploaded successfully!",
-      //       file: {
-      //         displayName: originalName,
-      //         filename: result.public_id,
-      //         url: result.secure_url,
-      //       },
-      //     });
-      //   }
-      // );
 
       // Remove extension for public_id because Cloudinary adds format automatically
       const publicId =
@@ -242,6 +218,60 @@ exports.getFiles = async (req, res) => {
     }
   } catch (err) {
     logError("getFiles", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// ---------- Delete File ----------
+exports.deleteFile = async (req, res) => {
+  try {
+    const { filename } = req.params;
+
+    if (!filename) {
+      return res.status(400).json({ error: "Filename is required" });
+    }
+
+    // ---- Cloudinary ----
+    if (cloudinaryConfigured) {
+      // Cloudinary public_id includes folder, e.g., "fileuploader/AI_Careers-123456"
+      cloudinary.uploader.destroy(
+        filename,
+        { resource_type: "image" },
+        (err, result) => {
+          if (err) {
+            logError("Cloudinary delete error", err);
+            return res
+              .status(500)
+              .json({ error: "Failed to delete file on Cloudinary" });
+          }
+
+          if (result.result !== "ok") {
+            return res
+              .status(404)
+              .json({ error: "File not found on Cloudinary" });
+          }
+
+          return res.json({ message: "File deleted successfully", filename });
+        }
+      );
+      return;
+    }
+
+    // ---- Local Disk Fallback ----
+    const filePath = path.join(UPLOADS_DIR, path.basename(filename));
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ error: "File not found on server" });
+    }
+
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        logError("Disk delete error", err);
+        return res.status(500).json({ error: "Failed to delete file" });
+      }
+      return res.json({ message: "File deleted successfully", filename });
+    });
+  } catch (err) {
+    logError("deleteFile", err);
     return res.status(500).json({ error: "Internal server error" });
   }
 };
