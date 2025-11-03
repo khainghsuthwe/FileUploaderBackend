@@ -83,7 +83,13 @@ POST /api/upload
 #### 2.Get a list of uploaded images.
 
 ```
-GET /api/uploads
+GET /api/upload
+```
+
+#### 2.Delete an image
+
+```
+POST /api/upload/:filename
 ```
 
 Notes
