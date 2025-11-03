@@ -2,27 +2,42 @@
 
 This is the Express backend for the FileUploader take-home assignment.
 
-Features
+## Features
 
 - Image upload using multer
 - File validation (image types + size limit)
-- Serves uploaded files from `/uploads`
+- Use Cloudinary for file storage and disk fall back which serves uploaded files from `/uploads`
 - Security: helmet, CORS configuration, rate-limiting
+
+## Hosted Link
+
+- The backend repository is hosted [here](https://file-uploader-backend-kinobi.vercel.app) on vercel.
+- Health check :
+
+```bash
+https://file-uploader-backend-kinobi.vercel.app/health
+```
 
 Requirements
 
 - Node 18+
 
-Run locally (development)
+### Run locally (development)
 
-1. Install dependencies
+1. Clone the [Repository](https://github.com/khainghsuthwe/FileUploaderBackend)
 
 ```bash
-cd Backend
+git clone https://github.com/khainghsuthwe/FileUploaderBackend
+```
+
+2. Install dependencies
+
+```bash
+cd FileUploaderBackend
 npm install
 ```
 
-2. Start the server (nodemon)
+3. Start the server (nodemon)
 
 ```bash
 npm run dev
@@ -36,7 +51,7 @@ Environment variables
 - FRONTEND_URL - allowed origin for CORS (default http://localhost:3000)
 - BACKEND_URL - optional URL returned as file URLs; otherwise uses `http://localhost:${PORT}`
 
-Cloudinary (optional)
+Cloudinary
 
 - If you want uploaded files to be stored on Cloudinary, set the following environment variables:
   - CLOUDINARY_CLOUD_NAME
@@ -57,7 +72,21 @@ docker compose up --build
 
 This will build both frontend and backend and expose the services on ports 3000 (frontend) and 5001 (backend).
 
+### API Endpoints
+
+#### 1.Upload a single image file.
+
+```
+POST /api/upload
+```
+
+#### 2.Get a list of uploaded images.
+
+```
+GET /api/uploads
+```
+
 Notes
 
-- The backend stores uploaded files in the local `uploads/` directory. For production, consider using object storage (S3) or a network file system.
-- Source is provided in CommonJS JavaScript under `src/` (server.js, routes, controllers). There are also TypeScript sources present — the project runs the JS files.
+- The backend stores uploaded files on Cloudinary. For production, consider using object storage (S3) or a network file system.
+- Source is provided in CommonJS JavaScript under `src/` (server.js, routes, controllers).
